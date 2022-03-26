@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<wallpaper
+    xmlns_android="http://schemas.android.com/apk/res/android"
+    android_description="A wallpaper app to display NFT works."
+    android_settingsActivity="com.hsiang.nftwallpaper.ui.main.MainFragment"
+    />

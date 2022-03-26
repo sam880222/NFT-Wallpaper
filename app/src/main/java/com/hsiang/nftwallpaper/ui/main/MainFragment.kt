@@ -1,14 +1,22 @@
 package com.hsiang.nftwallpaper.ui.main
 
+import android.app.WallpaperManager
+import android.content.ComponentName
+import android.content.Intent
 import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.hsiang.nftwallpaper.NFTWallpaperService
 import com.hsiang.nftwallpaper.R
+import com.hsiang.nftwallpaper.databinding.MainFragmentBinding
 
 class MainFragment : Fragment() {
+    private lateinit var binding: MainFragmentBinding
+    private val TAG = "MainFragment"
 
     companion object {
         fun newInstance() = MainFragment()
@@ -20,7 +28,23 @@ class MainFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        return inflater.inflate(R.layout.main_fragment, container, false)
+        binding = MainFragmentBinding.inflate(inflater)
+        return binding.root
+    }
+
+    override fun onStart() {
+        super.onStart()
+        binding.button.setOnClickListener {
+            Log.d(TAG, "~~~~~")
+            context?.let { context ->
+                val intent = Intent(WallpaperManager.ACTION_CHANGE_LIVE_WALLPAPER)
+                intent.putExtra(
+                    WallpaperManager.EXTRA_LIVE_WALLPAPER_COMPONENT,
+                    ComponentName(context, NFTWallpaperService::class.java)
+                )
+                startActivity(intent)
+            }
+        }
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {

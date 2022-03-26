@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.hsiang.nftwallpaper">
-
+    <uses-permission android:name="android.permission.SET_WALLPAPER"/>
     <uses-feature
         android:name="android.software.live_wallpaper"
         android:required="true" />
@@ -26,10 +26,13 @@
             android:enabled="true"
             android:label="NFT Wallpaper"
             android:permission="android.permission.BIND_WALLPAPER"
-            android:exported="false">
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.service.wallpaper.WallpaperService" />
             </intent-filter>
+            <meta-data
+                android:name="android.service.wallpaper"
+                android:resource="@xml/wallpaper" />
         </service>
     </application>
 

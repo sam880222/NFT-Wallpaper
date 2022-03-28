@@ -5,11 +5,14 @@ import android.content.ComponentName
 import android.content.Intent
 import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
+import android.os.Debug
 import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
+import androidx.preference.PreferenceManager
 import com.hsiang.nftwallpaper.utils.NFTWallpaperService
 import com.hsiang.nftwallpaper.databinding.MainFragmentBinding
 import com.hsiang.nftwallpaper.network.AkaswapApiService
@@ -45,6 +48,19 @@ class MainFragment : Fragment() {
                 startActivity(intent)
             }
 //            viewModel.getCreations()
+        }
+
+        binding.buttonDone.setOnClickListener {
+            val prefs = context?.let { it ->
+                PreferenceManager
+                    .getDefaultSharedPreferences(it)
+            }
+            val accountToken = binding.addressInput.editText?.text?.toString()
+            if (!accountToken.isNullOrEmpty()) {
+                prefs?.edit()?.putString("accountToken", accountToken)?.apply()
+                binding.addressInput.editText?.setText("")
+                Toast.makeText(context, "Success!", Toast.LENGTH_SHORT).show()
+            }
         }
     }
 

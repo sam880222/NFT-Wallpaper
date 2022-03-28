@@ -129,8 +129,8 @@ class NFTWallpaperService : WallpaperService() {
                 try {
                     bitmap = Glide.with(this@NFTWallpaperService)
                         .asBitmap()
-                        .load(if (url.isNullOrEmpty()) R.drawable.test1 else url)
-                        .placeholder(R.drawable.test1)
+                        .load(if (url.isNullOrEmpty()) R.drawable.default_bg else url)
+                        .placeholder(R.drawable.default_bg)
                         .submit()
                         .get()
                 } catch (e: GlideException) {
@@ -159,10 +159,13 @@ class NFTWallpaperService : WallpaperService() {
                 }
             }
 
+
             bitmap?.let {
                 canvas?.drawColor(Color.BLACK)
+                val leftPadding =
+                    (if (isPreview) -0.5f * (it.width - width) else -offset * (it.width - width))
                 canvas?.drawBitmap(
-                    it, -offset * (it.width - width), 0f, null
+                    it, leftPadding, 0f, null
                 )
             }
 

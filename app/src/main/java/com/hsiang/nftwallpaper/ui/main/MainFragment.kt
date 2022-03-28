@@ -13,6 +13,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.preference.PreferenceManager
+import com.hsiang.nftwallpaper.R
 import com.hsiang.nftwallpaper.utils.NFTWallpaperService
 import com.hsiang.nftwallpaper.databinding.MainFragmentBinding
 import com.hsiang.nftwallpaper.network.AkaswapApiService
@@ -37,7 +38,7 @@ class MainFragment : Fragment() {
 
     override fun onStart() {
         super.onStart()
-        binding.button.setOnClickListener {
+        binding.buttonStart.setOnClickListener {
             Log.d(TAG, "~~~~~")
             context?.let { context ->
                 val intent = Intent(WallpaperManager.ACTION_CHANGE_LIVE_WALLPAPER)

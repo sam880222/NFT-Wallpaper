@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">NFT 桌布</string>
+    <string name="creator_address">鑄造者地址</string>
+    <string name="get_latest_artwork">追蹤起來</string>
+    <string name="set_wallpaper">開始使用</string>
+</resources>

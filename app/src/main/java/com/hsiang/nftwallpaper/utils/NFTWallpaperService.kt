@@ -3,7 +3,6 @@ package com.hsiang.nftwallpaper.utils
 import android.content.SharedPreferences
 import android.graphics.Bitmap
 import android.graphics.Color
-import android.net.ConnectivityManager
 import android.os.Handler
 import android.os.Looper
 import android.service.wallpaper.WallpaperService
@@ -17,7 +16,6 @@ import com.hsiang.nftwallpaper.network.AKASWAP_IPFS_BASEURL
 import com.hsiang.nftwallpaper.network.NetworkManager.akaswapApi
 import kotlinx.coroutines.*
 import java.lang.Runnable
-import java.lang.RuntimeException
 import kotlin.coroutines.CoroutineContext
 
 class NFTWallpaperService : WallpaperService() {
@@ -129,8 +127,8 @@ class NFTWallpaperService : WallpaperService() {
                 try {
                     bitmap = Glide.with(this@NFTWallpaperService)
                         .asBitmap()
-                        .load(if (url.isNullOrEmpty()) R.drawable.default_bg else url)
-                        .placeholder(R.drawable.default_bg)
+                        .load(if (url.isNullOrEmpty()) R.drawable.img_default_bg else url)
+                        .placeholder(R.drawable.img_default_bg)
                         .submit()
                         .get()
                 } catch (e: GlideException) {

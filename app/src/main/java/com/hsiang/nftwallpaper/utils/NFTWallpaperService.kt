@@ -1,10 +1,7 @@
-package com.hsiang.nftwallpaper
+package com.hsiang.nftwallpaper.utils
 
 import android.graphics.Bitmap
-import android.graphics.Canvas
 import android.graphics.Color
-import android.graphics.Paint
-import android.graphics.drawable.Drawable
 import android.os.Handler
 import android.os.Looper
 import android.service.wallpaper.WallpaperService
@@ -12,13 +9,12 @@ import android.util.Log
 import android.view.SurfaceHolder
 import androidx.preference.PreferenceManager
 import com.bumptech.glide.Glide
-import com.bumptech.glide.request.target.CustomTarget
-import com.bumptech.glide.request.transition.Transition
+import com.hsiang.nftwallpaper.network.AKASWAP_IPFS_BASEURL
+import com.hsiang.nftwallpaper.network.NetworkManager.akaswapApi
 import kotlinx.coroutines.*
 import java.lang.Runnable
+import java.lang.RuntimeException
 import kotlin.coroutines.CoroutineContext
-import kotlin.math.abs
-import kotlin.random.Random
 
 class NFTWallpaperService : WallpaperService() {
     private val TAG = "NFTWallpaperService"
@@ -47,6 +43,7 @@ class NFTWallpaperService : WallpaperService() {
                 .getDefaultSharedPreferences(this@NFTWallpaperService)
             touchEnabled = prefs.getBoolean("touch", false)
             handler.post(drawRunner)
+            setOffsetNotificationsEnabled(true)
         }
 
         override fun onVisibilityChanged(visible: Boolean) {
@@ -70,7 +67,9 @@ class NFTWallpaperService : WallpaperService() {
         ) {
             this.width = width
             this.height = height
+
             super.onSurfaceChanged(holder, format, width, height)
+            drawFrame()
         }
 
         override fun onOffsetsChanged(
@@ -97,9 +96,10 @@ class NFTWallpaperService : WallpaperService() {
         private fun draw() {
             i = 1 - i
             scope.launch(Dispatchers.IO) {
-                val bitmapTemp = Glide.with(this@NFTWallpaperService)
+                val tokenUrl = getLatestCreationUrl()
+                bitmap = Glide.with(this@NFTWallpaperService)
                     .asBitmap()
-                    .load(if (i == 0) R.drawable.test0 else R.drawable.test1)
+                    .load(tokenUrl)
                     .submit()
                     .get()
 //                    .override(this.width, this.height)
@@ -114,13 +114,12 @@ class NFTWallpaperService : WallpaperService() {
 //
 //                        override fun onLoadCleared(placeholder: Drawable?) {}
 //                    })
-                bitmap = Bitmap.createScaledBitmap(
-                    bitmapTemp,
-                    bitmapTemp.width * height / bitmapTemp.height,
-                    height,
-                    true
-                )
+
                 drawFrame()
+                handler.removeCallbacks(drawRunner)
+                if (visible) {
+//                    handler.postDelayed(drawRunner, 5000)
+                }
             }
         }
 
@@ -128,19 +127,36 @@ class NFTWallpaperService : WallpaperService() {
             val holder = surfaceHolder
             val canvas = holder.lockCanvas()
 
+            if (bitmap?.height != height) {
+                bitmap = bitmap?.let {
+                    Bitmap.createScaledBitmap(
+                        it,
+                        it.width * height / it.height,
+                        height,
+                        true
+                    )
+                }
+            }
+
             bitmap?.let {
                 canvas?.drawColor(Color.BLACK)
                 canvas?.drawBitmap(
-                    it, -offset * abs(it.width - width), 0f, null
+                    it, -offset * (it.width - width), 0f, null
                 )
             }
 
             if (canvas != null)
                 holder.unlockCanvasAndPost(canvas)
+        }
 
-            handler.removeCallbacks(drawRunner)
-            if (visible) {
-                handler.postDelayed(drawRunner, 5000)
+        private suspend fun getLatestCreationUrl(): String? {
+            val res = akaswapApi.getAccountCreations("tz1MpVZXooZ2M74ZCpZegU4VEEf9DwNdPPJL")
+            return if (res.isSuccessful) {
+                val url = res.body()?.tokens?.get(0)?.displayUri?.replace("ipfs://", AKASWAP_IPFS_BASEURL)
+                Log.d(TAG, "Got token url $url")
+                url
+            } else {
+                null
             }
         }
     }

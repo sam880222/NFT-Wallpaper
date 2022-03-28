@@ -10,9 +10,9 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.hsiang.nftwallpaper.NFTWallpaperService
-import com.hsiang.nftwallpaper.R
+import com.hsiang.nftwallpaper.utils.NFTWallpaperService
 import com.hsiang.nftwallpaper.databinding.MainFragmentBinding
+import com.hsiang.nftwallpaper.network.AkaswapApiService
 
 class MainFragment : Fragment() {
     private lateinit var binding: MainFragmentBinding
@@ -44,6 +44,7 @@ class MainFragment : Fragment() {
                 )
                 startActivity(intent)
             }
+//            viewModel.getCreations()
         }
     }
 

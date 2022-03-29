@@ -4,7 +4,31 @@ plugins {
     id 'kotlin-kapt'
 }
 
+// Create a variable called keystorePropertiesFile, and initialize it to your
+// keystore.properties file, in the rootProject folder.
+def keystorePropertiesFile = rootProject.file("keystore.properties")
+
+// Initialize a new Properties() object called keystoreProperties.
+def keystoreProperties = new Properties()
+
+// Load your keystore.properties file into the keystoreProperties object.
+keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
+
 android {
+    signingConfigs {
+        debug {
+            keyAlias keystoreProperties['keyAlias']
+            keyPassword keystoreProperties['keyPassword']
+            storeFile file(keystoreProperties['storeFile'])
+            storePassword keystoreProperties['storePassword']
+        }
+        release {
+            keyAlias keystoreProperties['keyAlias']
+            keyPassword keystoreProperties['keyPassword']
+            storeFile file(keystoreProperties['storeFile'])
+            storePassword keystoreProperties['storePassword']
+        }
+    }
     compileSdk 31
 
     defaultConfig {
@@ -21,6 +45,21 @@ android {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.release
+        }
+        applicationVariants.all{
+                // this method is use to rename your all apk weather
+                // it may be signed or unsigned(debug apk)
+            variant ->
+                variant.outputs.each{
+                        // on below line we are setting a
+                        // name to our apk as GFG.apk
+                    output->
+                        def name = "NFT-Wallpaper.apk"
+                        // on below line we are setting the
+                        // outputFile Name to our apk file.
+                        output.outputFileName = name
+                }
         }
     }
     compileOptions {
@@ -56,9 +95,8 @@ dependencies {
     implementation 'com.squareup.retrofit2:converter-gson:2.9.0'
     implementation 'com.squareup.retrofit2:converter-scalars:2.5.0'
     implementation 'com.github.bumptech.glide:annotations:4.13.1'
-    implementation ("com.github.bumptech.glide:okhttp3-integration:4.11.0") {
-        exclude group: "com.squareup.okhttp:"
-    }
+    implementation "com.github.bumptech.glide:okhttp3-integration:4.11.0"
     implementation "com.squareup.okhttp:okhttp:2.7.5"
+    implementation 'org.conscrypt:conscrypt-android:2.2.1'
 //    annotationProcessor 'com.github.bumptech.glide:compiler:4.11.0'
 }

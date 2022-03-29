@@ -110,7 +110,7 @@ class NFTWallpaperService : WallpaperService() {
             updateToken()
             scope.launch(Dispatchers.IO) {
                 val tokenUrl = getLatestCreationUrl()
-                if (tokenUrl?.equals(url) == false) {
+                if (tokenUrl?.equals(url) != true) {
                     url = tokenUrl
                     prefs.edit()?.putString("tokenUrl", tokenUrl)?.apply()
                     draw()
@@ -133,6 +133,13 @@ class NFTWallpaperService : WallpaperService() {
                         .get()
                 } catch (e: GlideException) {
                     e.logRootCauses(TAG)
+                } catch (e: Exception) {
+                    bitmap = Glide.with(this@NFTWallpaperService)
+                        .asBitmap()
+                        .load(R.drawable.img_default_bg)
+                        .placeholder(R.drawable.img_default_bg)
+                        .submit()
+                        .get()
                 }
                 drawFrame()
 //                handler.removeCallbacks(drawRunner)

@@ -187,6 +187,7 @@ class NFTWallpaperService : WallpaperService() {
             return if (res.isSuccessful) {
                 val body = res.body()
                 if (body?.count ?: 0 < 1) {
+                    Log.i(TAG, "Nothing in account!")
                     return null
                 }
                 val url = body?.tokens?.get(0)?.displayUri?.replace("ipfs://", AKASWAP_IPFS_BASEURL)

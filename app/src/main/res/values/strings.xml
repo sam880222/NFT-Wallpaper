@@ -3,4 +3,5 @@
     <string name="creator_address">Creator address</string>
     <string name="get_latest_artwork">Get Latest Artwork</string>
     <string name="set_wallpaper">Set Wallpaper</string>
+    <string name="wallpaper_description">A wallpaper app to display NFT works.</string>
 </resources>

@@ -4,4 +4,5 @@
     <string name="creator_address">鑄造者地址</string>
     <string name="get_latest_artwork">追蹤起來</string>
     <string name="set_wallpaper">開始使用</string>
+    <string name="wallpaper_description">用最新的NFT點綴你的桌布！</string>
 </resources>

@@ -125,7 +125,7 @@ class NFTWallpaperService : WallpaperService() {
         private fun draw() {
             scope.launch(Dispatchers.IO) {
                 try {
-                    bitmap = Glide.with(this@NFTWallpaperService)
+                    bitmap = GlideApp.with(this@NFTWallpaperService)
                         .asBitmap()
                         .load(if (url.isNullOrEmpty()) R.drawable.img_default_bg else url)
                         .placeholder(R.drawable.img_default_bg)
